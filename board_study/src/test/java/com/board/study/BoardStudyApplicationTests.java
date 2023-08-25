@@ -38,14 +38,14 @@ class BoardStudyApplicationTests {
 
 
 	void findAll() {
-		List <BoardResponseDto> list = boardService.findAll();
-		
-		if(list != null) {
-			System.out.println("# Success findAll() : " + list.toString());
-		} else {
-			System.out.println("#Fail findAll() ~");
-		}
-		
+//		List <BoardResponseDto> list = boardService.findAll();
+//		
+//		if(list != null) {
+//			System.out.println("# Success findAll() : " + list.toString());
+//		} else {
+//			System.out.println("#Fail findAll() ~");
+//		}
+//		
 	}
 
 

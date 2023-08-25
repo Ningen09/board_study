@@ -22,7 +22,9 @@ repositories {
 }
 
 dependencies {
+	//Thymeleaf와 Thymeleaf Layout에 대한 의존성을 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
 	// JPA
