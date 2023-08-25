@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout/default_layout">
+   	<!-- layout Content -->
+	<th:block layout:fragment="content">
+		<div class="container">
+			<h1>Board Register.</h1>
+			<form id="frm" action="/board/write/action" method="post">
+				<div class="mb-3">
+				    <label for="exampleInputEmail1" class="form-label">Title.</label>
+				    <input type="text" class="form-control" name="title" required >
+				</div>
+				<div class="mb-3">
+			    	<label for="exampleInputPassword1" class="form-label">Content.</label>
+			    	<textarea class="form-control" rows="5" name="content" required ></textarea>
+				</div>
+				<div class="mb-3">
+				    <label for="exampleInputEmail1" class="form-label">Writer.</label>
+				    <input type="text" class="form-control" name="registerId" required >
+				</div>
+				<button type="button" class="btn btn-success" onclick="javascript:location.href='/board/list'">Previous</button>
+				<button type="button" class="btn btn-primary" onclick="fnSubmit();">Submit</button>
+			</form>
+		</div>
+		<script th:inline="javascript">
+			let frm = $("#frm");
+			
+			function fnSubmit() {
+		        $("#frm").submit();
+		    }
+		    
+		    $(function() {
+		    	frm.validate({
+		            messages: {
+		            	// Message Custom
+		            	title: {
+		                    required : "Custom required, Please enter a title."
+		                }
+		            },
+		            submitHandler: function (form) {
+		                // Submit Action
+		                form.submit();
+		            }
+		        });
+		    });
+		</script>
+	</th:block>
+</html>
