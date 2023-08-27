@@ -5,11 +5,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.board.study.dto.board.BoardRequestDto;
 import com.board.study.dto.board.BoardResponseDto;
+import com.board.study.dto.board.BoardRequestDto;
 import com.board.study.entity.board.Board;
 import com.board.study.entity.board.BoardRepository;
 
@@ -18,27 +20,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class BoardService {
-	
-	private final BoardRepository boardRepository = null;
+
+	private final BoardRepository boardRepository;
+	private final BoardFileService boardFileService;
 	
 	@Transactional
-	public Long save(BoardRequestDto boardSaveDto) {
-		return boardRepository.save(boardSaveDto.toEntity()).getId();
+	public boolean save(BoardRequestDto boardRequestDto, MultipartHttpServletRequest multiRequest) throws Exception {
+		
+		Board result = boardRepository.save(boardRequestDto.toEntity());
+		
+		boolean resultFlag = false;
+		
+		if (result != null) {
+			boardFileService.uploadFile(multiRequest, result.getId());
+			resultFlag = true;
+		}
+		
+		return resultFlag;
 	}
 	
-	/*기존의 서비스에서 페이징 처리를 위한 설정 추가,
-	 * Spring Data JPA에서는 PageRequest객체를 지원하기에 간단한 페이징 처리가 가능하다*/
-	
+	/*
+		readOnly=true オプションをトランザクションに追加すると、Spring FrameworkはHibernateセッションのフラッシュモードをMANUALに設定します。
+		この設定により、明示的なフラッシュが行われない限り、自動的なフラッシュは発生しません。
+		したがって、トランザクションをコミットしても永続性コンテキストがフラッシュされず、エンティティの登録、更新、削除操作が行われません。
+		また、読み取り専用として設定されるため、永続性コンテキストは変更の検出のためのスナップショットを保持しないため、パフォーマンスが向上します。
+	 */
 	@Transactional(readOnly = true)
-//	public List < BoardResponseDto > findAll(){
-//		return boardRepository.findAll().stream().map(BoardResponseDto::new).collect(Collectors.toList());
-//	}
-	
-	public HashMap<String, Object> findAll(Integer page, Integer size) {
+	public HashMap<String, Object> findAll(Integer page, Integer size) throws Exception {
 		
-		HashMap <String, Object> resultMap = new HashMap<String, Object>();
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
-		Page <Board> list = boardRepository.findAll(PageRequest.of(page, size));
+		Page<Board> list = boardRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "registerTime")));
 		
 		resultMap.put("list", list.stream().map(BoardResponseDto::new).collect(Collectors.toList()));
 		resultMap.put("paging", list.getPageable());
@@ -46,27 +58,44 @@ public class BoardService {
 		resultMap.put("totalPage", list.getTotalPages());
 		
 		return resultMap;
+	}
+	
+	public HashMap<String, Object> findById(Long id) throws Exception {
 		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>(); 
+		
+		boardRepository.updateBoardReadCntInc(id);
+		
+		BoardResponseDto info = new BoardResponseDto(boardRepository.findById(id).get());
+		
+		resultMap.put("info", info);
+		resultMap.put("fileList", boardFileService.findByBoardId(info.getId()));
+		
+		return resultMap;
 	}
 	
-	public BoardResponseDto findById(Long id) {
-		return new BoardResponseDto(boardRepository.findById(id).get());
+	public boolean updateBoard(BoardRequestDto boardRequestDto, MultipartHttpServletRequest multiRequest) throws Exception {
+		
+		int result = boardRepository.updateBoard(boardRequestDto);
+		
+		boolean resultFlag = false;
+		
+		if (result > 0) {
+			boardFileService.uploadFile(multiRequest, boardRequestDto.getId());
+			resultFlag = true;
+		}
+		
+		return resultFlag;
 	}
 	
-	public int updateBoard(BoardRequestDto boardRequestDto) {
-		return boardRepository.updateBoard(boardRequestDto);
-	}
-	
-	public int updateBoardReadCntInc(Long id) {
-		return boardRepository.updateBoardReadCntInc(id);
-	}
-	
-	public void deleteById(Long id) {
+	public void deleteById(Long id) throws Exception {
+		Long[] idArr = {id};
+		boardFileService.deleteBoardFileYn(idArr);
 		boardRepository.deleteById(id);
 	}
 	
-	public void deleteAll(Long[] deleteId) {
-		boardRepository.deleteBoard(deleteId);
+	public void deleteAll(Long[] deleteIdList) throws Exception {
+		boardFileService.deleteBoardFileYn(deleteIdList);
+		boardRepository.deleteBoard(deleteIdList);
 	}
-	
 }

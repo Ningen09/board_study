@@ -1,6 +1,7 @@
 package com.board.study.dto.board;
 
 import com.board.study.entity.board.Board;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,9 +17,15 @@ public class BoardRequestDto {
 	
 	public Board toEntity() {
 		return Board.builder()
-				.title(title)
-				.content(content)
-				.registerId(registerId)
-				.build();
+			.title(title)
+			.content(content)
+			.registerId(registerId)
+			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "BoardRequestDto [id=" + id + ", title=" + title + ", content=" + content + ", registerId=" + registerId
+				+ "]";
 	}
 }

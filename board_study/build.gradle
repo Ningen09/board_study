@@ -22,11 +22,15 @@ repositories {
 }
 
 dependencies {
-	//Thymeleaf와 Thymeleaf Layout에 대한 의존성을 추가
+	//保存されるファイル名をランダム文字列にするために使用
+	implementation 'org.apache.commons:commons-lang3'
+	//ThymeleafとThymeleaf Layoutへの依存性を追加
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'\
+	//ログイン機能を作成するためのSecurityの追加
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	// JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compileOnly 'org.projectlombok:lombok'
@@ -35,6 +39,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
+	
 }
 
 tasks.named('test') {
