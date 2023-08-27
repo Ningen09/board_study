@@ -3,20 +3,24 @@ package com.board.study.entity.board.member;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import com.board.study.entity.BaseTimeEntity;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(of= {"id"}) // equals, hashCode 자동 생성
+@EqualsAndHashCode(of= {"id"}) // equals, hashCode の自動生成
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -50,39 +54,39 @@ public class Member extends BaseTimeEntity implements UserDetails {
 		return this.getEmail();
 	}
 	
-	 //계정이 갖고있는 권한 목록은 리턴
+    // アカウントが保持する権限のリストを返す
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         
-        Collection<GrantedAuthority> collectors = new ArrayList<>();
-        collectors.add(() -> {
-            return "계정별 등록할 권한";
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(() -> {
+            return "アカウントごとに登録する権限";
         });
         
-        //collectors.add(new SimpleGrantedAuthority("Role"));
+        // authorities.add(new SimpleGrantedAuthority("Role"));
         
-        return collectors;
+        return authorities;
     }
     
-	//계정이 만료되지 않았는지 리턴 (true: 만료 안됨)
+	// アカウントの有効期限が切れていないかを返す（true: 有効期限切れていない）
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    //계정이 잠겨있는지 않았는지 리턴. (true: 잠기지 않음)
+    // アカウントがロックされていないかを返す（true: ロックされていない）
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    //비밀번호가 만료되지 않았는지 리턴한다. (true: 만료 안됨)
+    // パスワードの有効期限が切れていないかを返す（true: 有効期限切れていない）
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    //계정이 활성화(사용가능)인지 리턴 (true: 활성화)
+    // アカウントが有効かどうかを返す（true: 有効）
     @Override
     public boolean isEnabled() {
         return true;

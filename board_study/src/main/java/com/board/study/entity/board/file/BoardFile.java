@@ -21,17 +21,18 @@ public class BoardFile {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	private Long boardId;
-	private String origFileName;
-	private String saveFileName;
-	private int fileSize;
-	private String fileExt;
-	private String filePath;
-	private String deleteYn;
+	private Long id;  // ファイルの識別子
+	
+	private Long boardId;  // 掲示板の識別子
+	private String origFileName;  // 元ファイル名
+	private String saveFileName;  // 保存されたファイル名
+	private int fileSize;  // ファイルのサイズ
+	private String fileExt;  // ファイルの拡張子
+	private String filePath;  // ファイルのパス
+	private String deleteYn;  // 削除の可否
 	
 	@CreatedDate
-	private LocalDateTime registerTime;
+	private LocalDateTime registerTime;  // 登録時刻
 	
 	@Builder
 	public BoardFile(Long id, Long boardId, String origFileName, String saveFileName, int fileSize, String fileExt,

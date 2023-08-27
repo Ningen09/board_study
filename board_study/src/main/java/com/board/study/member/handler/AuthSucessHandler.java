@@ -3,6 +3,7 @@ package com.board.study.member.handler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	@Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         
+        // 認証成功時の処理
         memberRepository.updateMemberLastLogin(authentication.getName(), LocalDateTime.now());
         setDefaultTargetUrl("/board/list");
         

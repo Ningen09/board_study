@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.board.study.dto.board.BoardRequestDto;
 import com.board.study.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class BoardController {
 			, @RequestParam(required = false, defaultValue = "5") Integer size) throws Exception {
 		
 		try {
+			// ページ、サイズを指定して掲示板リストの情報を取得し、モデルに追加します。
 			model.addAttribute("resultMap", boardService.findAll(page, size));
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()); 
@@ -32,6 +34,7 @@ public class BoardController {
 	
 	@GetMapping("/board/write")
 	public String getBoardWritePage(Model model, BoardRequestDto boardRequestDto) {
+		// 掲示板投稿ページを返します。
 		return "/board/write";
 	}
 	
@@ -40,6 +43,7 @@ public class BoardController {
 		
 		try {
 			if (boardRequestDto.getId() != null) {
+				// 記事IDが指定されている場合、記事の情報を取得し、モデルに追加します。
 				model.addAttribute("resultMap", boardService.findById(boardRequestDto.getId()));
 			}
 		} catch (Exception e) {
@@ -54,7 +58,8 @@ public class BoardController {
 		
 		try {
 			if (!boardService.save(boardRequestDto, multiRequest)) {
-				throw new Exception("#Exception boardWriteAction!");
+				// 記事の保存が失敗した場合、例外を投げます。
+				throw new Exception("#例外 boardWriteAction!");
 			}
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()); 
@@ -70,7 +75,8 @@ public class BoardController {
 			boolean result = boardService.updateBoard(boardRequestDto, multiRequest);
 			
 			if (!result) {
-				throw new Exception("#Exception boardViewAction!");
+				// 記事の更新が失敗した場合、例外を投げます。
+				throw new Exception("#例外 boardViewAction!");
 			}
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()); 
@@ -83,6 +89,7 @@ public class BoardController {
 	public String boardViewDeleteAction(Model model, @RequestParam() Long id) throws Exception {
 		
 		try {
+			// 記事を削除します。
 			boardService.deleteById(id);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()); 
@@ -95,6 +102,7 @@ public class BoardController {
 	public String boardDeleteAction(Model model, @RequestParam() Long[] deleteId) throws Exception {
 		
 		try {
+			// 複数の記事を一括削除します。
 			boardService.deleteAll(deleteId);
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()); 
@@ -103,4 +111,3 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 }
-

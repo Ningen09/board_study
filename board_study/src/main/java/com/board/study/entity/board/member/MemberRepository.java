@@ -8,15 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface MemberRepository extends JpaRepository<Member, Long>{
+// JpaRepository を継承して、Member エンティティに関する CRUD 機能を提供する MemberRepository インターフェース
+public interface MemberRepository extends JpaRepository<Member, Long> {
 	
+    // 最終ログイン時刻の更新クエリ
 	static final String UPDATE_MEMBER_LAST_LOGIN = "UPDATE Member "
 			+ "SET LAST_LOGIN_TIME = :lastLoginTime "
 			+ "WHERE EMAIL = :email";
 	
+	// 最終ログイン時刻の更新メソッド
 	@Transactional
 	@Modifying
 	@Query(value=UPDATE_MEMBER_LAST_LOGIN, nativeQuery = true)
 	public int updateMemberLastLogin(@Param("email") String email, @Param("lastLoginTime") LocalDateTime lastLoginTime);
-	public Member findByEmail(String emfail);
+	
+	// メールアドレスによる会員の検索メソッド
+	public Member findByEmail(String email);
 }

@@ -8,7 +8,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class BoardFileRequestDto {
-	private Long id;
-	private Long[] idArr;
-	private String fileId;
+    
+    // ID
+    private Long id;
+    
+    // IDの配列
+    private Long[] idArr;
+    
+    // ファイルID
+    private String fileId;
 }

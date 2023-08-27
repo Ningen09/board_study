@@ -5,20 +5,27 @@ import lombok.Getter;
 
 @Getter
 public class BoardFileResponseDto {
-	
-	private String origFileName;
-	private String saveFileName;
-	private String filePath;
-	
-	public BoardFileResponseDto(BoardFile entity) {
-		this.origFileName = entity.getOrigFileName();
-		this.saveFileName = entity.getSaveFileName();
-		this.filePath = entity.getFilePath();
-	}
+    
+    // オリジナルファイル名
+    private String origFileName;
+    
+    // 保存ファイル名
+    private String saveFileName;
+    
+    // ファイルのパス
+    private String filePath;
+    
+    // BoardFileエンティティを受け取って初期化するコンストラクタ
+    public BoardFileResponseDto(BoardFile entity) {
+        this.origFileName = entity.getOrigFileName();
+        this.saveFileName = entity.getSaveFileName();
+        this.filePath = entity.getFilePath();
+    }
 
-	@Override
-	public String toString() {
-		return "FileMstResponseDto [origFileName=" + origFileName + ", saveFileName=" + saveFileName + ", filePath="
-				+ filePath + "]";
-	}
+    // オブジェクトの文字列表現を返すメソッド
+    @Override
+    public String toString() {
+        return "BoardFileResponseDto [origFileName=" + origFileName + ", saveFileName=" + saveFileName + ", filePath="
+                + filePath + "]";
+    }
 }

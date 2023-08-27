@@ -38,10 +38,10 @@ public class BoardFileService {
 		
 		if (boardId == null) throw new NullPointerException("Empty BOARD_ID.");
 		
-		// 파라미터 이름을 키로 파라미터에 해당하는 파일 정보를 값으로 하는 Map을 가져온다.
+		// パラメータ名をキーとして、ファイル情報を値とする Map を取得します。
 		Map<String, MultipartFile> files = multiRequest.getFileMap();
 		
-		// files.entrySet()의 요소를 읽어온다.
+		// files.entrySet() の要素を読み込みます。
 		Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();
 		
 		MultipartFile mFile;
@@ -64,7 +64,7 @@ public class BoardFileService {
 				
 				String filePath = "C:\\dev_tools\\eclipse\\workspace\\uploadFiles\\";
 				
-				// 파일 업로드 경로 + 현재 년월(월별관리)
+				// ファイルアップロードパス + 現在の年月（月ごとの管理）
 				filePath = filePath + File.separator + String.valueOf(cal.get(Calendar.YEAR)) + File.separator + String.valueOf(cal.get(Calendar.MONTH) + 1);
 				randomFileName = "FILE_" + RandomStringUtils.random(8, 0, 0, false, true, null, new SecureRandom());
 				
@@ -76,7 +76,7 @@ public class BoardFileService {
 				File filePyhFolder = new File(filePath);
 				
 				if (!filePyhFolder.exists()) {
-					// 부모 폴더까지 포함하여 경로에 폴더를 만든다.
+					// 親フォルダも含めてパスにフォルダを作成します。
 					if (!filePyhFolder.mkdirs()) {
 						throw new Exception("File.mkdir() : Fail."); 
 					}
@@ -84,14 +84,14 @@ public class BoardFileService {
 				
 				File saveFile = new File(saveFilePath);
 				
-				// saveFile이 File이면 true, 아니면 false
-				// 파일명이 중복일 경우 파일명(1).확장자, 파일명(2).확장자 와 같은 형태로 생성한다.
+				// saveFile が File の場合は true、それ以外は false
+				// ファイル名が重複する場合は、ファイル名(1).拡張子、ファイル名(2).拡張子 などの形式で生成します。
 				if (saveFile.isFile()) {
 					boolean _exist = true;
 					
 					int index = 0;
 					
-					// 동일한 파일명이 존재하지 않을때까지 반복한다.
+					// 同じファイル名が存在しない限りループします。
 					while (_exist) {
 						index++;
 						
@@ -108,7 +108,7 @@ public class BoardFileService {
 					
 					mFile.transferTo(new File(savaFilePath));
 				} else {
-					// 생성한 파일 객체를 업로드 처리하지 않으면 임시파일에 저장된 파일이 자동적으로 삭제되기 때문에 transferTo(File f) 메서드를 이용해서 업로드 처리한다.
+					// 作成したファイルオブジェクトをアップロード処理しない場合、一時ファイルに保存されたファイルは自動的に削除されるため、transferTo(File f) メソッドを使用してアップロード処理します。
 					mFile.transferTo(saveFile);
 				}
 				

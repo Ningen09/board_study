@@ -10,22 +10,34 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class BoardRequestDto {
-	private Long id;
-	private String title;
-	private String content;
-	private String registerId;
-	
-	public Board toEntity() {
-		return Board.builder()
-			.title(title)
-			.content(content)
-			.registerId(registerId)
-			.build();
-	}
+    
+    // ボードの識別子
+    private Long id;
+    
+    // ボードのタイトル
+    private String title;
+    
+    // ボードの内容
+    private String content;
+    
+    // 登録したユーザーの識別子
+    private String registerId;
+    
+    // Boardエンティティに変換するメソッド
+    public Board toEntity() {
+        return Board.builder()
+            .title(title)
+            .content(content)
+            .registerId(registerId)
+            .build();
+    }
 
-	@Override
-	public String toString() {
-		return "BoardRequestDto [id=" + id + ", title=" + title + ", content=" + content + ", registerId=" + registerId
-				+ "]";
-	}
+    // オブジェクトの文字列表現を返すメソッド
+    @Override
+    public String toString() {
+        return "BoardRequestDto [id=" + id + ", title=" + title + ", content=" + content + ", registerId=" + registerId
+                + "]";
+    }
 }
+
+

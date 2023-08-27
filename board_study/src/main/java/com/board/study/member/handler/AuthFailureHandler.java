@@ -6,6 +6,7 @@ import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,15 +18,15 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 		
-	    String msg = "Invalid Email or Password";
+	    String msg = "無効なメールアドレスまたはパスワードです";
 	
-	    // exception 관련 메세지 처리
+	    // 例外関連メッセージの処理
 	    if (exception instanceof DisabledException) {
-        	msg = "DisabledException account";
+        	msg = "アカウントが無効です";
         } else if(exception instanceof CredentialsExpiredException) {
-        	msg = "CredentialsExpiredException account";
+        	msg = "パスワードの有効期限が切れています";
         } else if(exception instanceof BadCredentialsException ) {
-        	msg = "BadCredentialsException account";
+        	msg = "無効なメールアドレスまたはパスワードです";
         }
 	
 	    setDefaultFailureUrl("/login?error=true&exception=" + msg);

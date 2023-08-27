@@ -17,9 +17,11 @@ public class MemberService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 			
+		// メールアドレスを基にメンバーエンティティをデータベースから取得します。
 		Member member = memberRepository.findByEmail(email);
 		
-		if (member == null) throw new UsernameNotFoundException("Not Found account."); 
+		// メンバーが見つからない場合、UsernameNotFoundException がスローされます。
+		if (member == null) throw new UsernameNotFoundException("アカウントが見つかりません。"); 
 		
 		return member;
 	}
